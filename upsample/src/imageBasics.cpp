@@ -1,4 +1,23 @@
+/*
+ * Copyright (C) 2021 Chuanbeibei Shi and Yushu Yu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <iostream>
+#include <vector>
+#include <fstream>
 #include <chrono>
 
 using namespace std;
@@ -7,12 +26,89 @@ using namespace std;
 #include <opencv2/highgui/highgui.hpp>
 #include <Eigen/Dense>
 #include "upsample.h"
+#include "imageBasics.h"
 
 
 int main(int argc, char **argv) {
   // 读取argv[1]指定的图像
   cv::Mat image;
-  auto filename = "i"; 
+	
+  ifstream infile;
+  infile.open("velo_data", ios::in);
+  
+  if (!infile.is_open())
+  {
+  	cout << "read file failed" << endl;
+  }
+  //input as string.
+  string buf;
+  unsigned long line_no = 0;	
+  vector<pointcoordinate> pc_array;	
+  
+  while (getline(infile,buf)) //each line
+  {
+  	cout << buf << endl;
+  	int index = buf.find(",");
+  	//cout << index << endl;
+  	int index2 = buf.find(",", index + 1);
+  	int index3 = buf.find(",", index2 + 1);
+  	//cout<< index << "2." << index2 << "3, " << index3 <<  endl; 
+  
+  	string s1 = buf.substr(0, index);
+  	string s2 = buf.substr(index+1, index2-index-1);
+  	string s3 = buf.substr(index2+1, index3-index2-1);
+  	string s4 = buf.substr(index3+1, buf.length()-index3-1);
+  	//cout << "s1:" << s1 << ", s2:" << s2 << ", s3: " << s3 << ", s4: " << s4 << endl;
+  	//float of = stof(s1,0);
+  	//cout << "test transfer: " << of << endl; 
+  	pointcoordinate thispoint;
+  	thispoint.x_3d = stof(s1, 0);
+  	thispoint.y_3d = stof(s2, 0);
+  	thispoint.z_3d = stof(s3, 0);
+  	thispoint.print();
+    pc_array.push_back(thispoint); 
+
+  	line_no++;
+  }
+  cout << "line number: " << line_no << endl; 
+  infile.close(); //close file stream 
+
+  ifstream infile2;
+  infile2.open("velo_img_data", ios::in);
+  
+  if (!infile2.is_open())
+  {
+  	cout << "read file failed" << endl;
+  }
+  //input as string. 
+  string buf2;
+  unsigned long line_no_2 = 0;	
+  
+  while (getline(infile2,buf2))
+  {
+  	cout << buf2 << endl;
+  	int index = buf2.find(",");
+  	//cout << index << endl;
+  
+  	string s1 = buf2.substr(0, index);
+  	string s2 = buf2.substr(index+1, buf2.length()-index-1);
+  	//cout << "s1:" << s1 << ", s2:" << s2 << ", s3: " << s3 << ", s4: " << s4 << endl;
+  	//float of = stof(s1,0);
+  	//cout << "test transfer: " << of << endl; 
+  	/*pointcoordinate thispoint;
+  	thispoint.u_px = stof(s1, 0);
+  	thispoint.v_px = stof(s2, 0);
+  	thispoint.print();*/
+	pc_array[line_no_2].u_px = stof(s1,0); 
+	pc_array[line_no_2].v_px = stof(s2,0); 
+	cout << "current line number: " << line_no_2 << endl;
+	pc_array[line_no_2].print();
+  
+  	line_no_2++;
+  }
+  cout << "line number: " << line_no << endl; 
+  infile2.close();   
+
   image = cv::imread(argv[1]); //cv::imread函数读取指定路径下的图像
   Eigen::Vector2d u;
   u << 0,1;
