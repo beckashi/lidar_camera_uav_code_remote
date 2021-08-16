@@ -1,0 +1,3 @@
+/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles/rebuild_cache.dir
+/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles/imageBasics.dir
+/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles/edit_cache.dir

@@ -30,8 +30,13 @@ using namespace std;
 
 
 int main(int argc, char **argv) {
+  double Wp = 0, Gr = 0, Gs = 0,S=0;
+  int flag;
+  int z=0;
+  //int grid=5; // Size of the mask/kernel
   // 读取argv[1]指定的图像
   cv::Mat image;
+  cv::Mat image1;
 	
   ifstream infile;
   infile.open("velo_data", ios::in);
@@ -43,15 +48,15 @@ int main(int argc, char **argv) {
   //input as string.
   string buf;
   unsigned long line_no = 0;	
-  vector<pointcoordinate> pc_array;	
+  vector<pointcoordinate> pc_array;	//Five coordinates for each point
   
   while (getline(infile,buf)) //each line
   {
-  	cout << buf << endl;
+  	//cout << buf << endl;
   	int index = buf.find(",");
   	//cout << index << endl;
   	int index2 = buf.find(",", index + 1);
-  	int index3 = buf.find(",", index2 + 1);
+  	int index3 = buf.find(",", index2 + 1);//velo_data 3 colomns
   	//cout<< index << "2." << index2 << "3, " << index3 <<  endl; 
   
   	string s1 = buf.substr(0, index);
@@ -64,13 +69,13 @@ int main(int argc, char **argv) {
   	pointcoordinate thispoint;
   	thispoint.x_3d = stof(s1, 0);
   	thispoint.y_3d = stof(s2, 0);
-  	thispoint.z_3d = stof(s3, 0);
+  	thispoint.z_3d = stof(s3, 0);//3D coordinates
   	thispoint.print();
     pc_array.push_back(thispoint); 
 
   	line_no++;
   }
-  cout << "line number: " << line_no << endl; 
+  //cout << "line number: " << line_no << endl; 
   infile.close(); //close file stream 
 
   ifstream infile2;
@@ -86,12 +91,12 @@ int main(int argc, char **argv) {
   
   while (getline(infile2,buf2))
   {
-  	cout << buf2 << endl;
+  	//cout << buf2 << endl;
   	int index = buf2.find(",");
   	//cout << index << endl;
   
   	string s1 = buf2.substr(0, index);
-  	string s2 = buf2.substr(index+1, buf2.length()-index-1);
+  	string s2 = buf2.substr(index+1, buf2.length()-index-1);//get pixel coodinates
   	//cout << "s1:" << s1 << ", s2:" << s2 << ", s3: " << s3 << ", s4: " << s4 << endl;
   	//float of = stof(s1,0);
   	//cout << "test transfer: " << of << endl; 
@@ -101,18 +106,126 @@ int main(int argc, char **argv) {
   	thispoint.print();*/
 	pc_array[line_no_2].u_px = stof(s1,0); 
 	pc_array[line_no_2].v_px = stof(s2,0); 
-	cout << "current line number: " << line_no_2 << endl;
-	pc_array[line_no_2].print();
+	//cout << "current line number: " << line_no_2 << endl;
+	//pc_array[line_no_2].print();
   
+  double pu = pc_array[line_no_2].u_px; 
+  double pv = pc_array[line_no_2].v_px;
+  double dx = pc_array[line_no_2].x_3d;
+  double dy = pc_array[line_no_2].y_3d;
+  double dz = pc_array[line_no_2].z_3d;
+  int u[25],v[25],Dx[25];//change
+  for(int i=0;i<111;i++){
+    for (int v=0; v<555; v=v+1)
+    {
+      for (int u=0; u<1836; u=u+1)
+      {
+        if((pu>i*5)&&(pu<5+i*5)&&(pv>i*5)&&(pv<5+i*5)){
+          for(z=0;z++;){
+            u[z] = pu;
+            v[z] = pv;
+          } //z points in 5*5
+          
+        }
+        else
+        {break;}
+      }
+    }
+        for(int j=0;j<z;j++){//j is the number of points in 5*5.!=25
+          
+
+        if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>i)&&(v[j]<(i+1))) flag=1;
+        if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=2;
+        if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=3;
+        if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=4;
+        if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=5;
+        if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>i)&&(v[j]<(i+1))) flag=6;
+        if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=7;
+        if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=8;
+        if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=9;
+        if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=10;
+        if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>i)&&(v[j]<(i+1))) flag=11;
+        if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=12;
+        if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=13;
+        if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=14;
+        if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=15;
+        if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>i)&&(v[j]<(i+1))) flag=16;
+        if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=17;
+        if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=18;
+        if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=19;
+        if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=20;
+        if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>i)&&(v[j]<(i+1))) flag=21;
+        if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=22;
+        if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=23;
+        if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=24;
+        if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=25;
+
+         switch(flag){
+          case 1:{ Dx[1] = upsample(dx,flag);
+            break;}
+          case 2:{Dx[2] = upsample(dx,flag);
+            break;}
+          case 3:{Dx[3] = upsample(dx,flag);
+            break;}
+          case 4:{Dx[4] = upsample(dx,flag);
+            break;}
+          case 5:{Dx[5] = upsample(dx,flag);
+            break;}
+          case 6:{Dx[6] = upsample(dx,flag);
+            break;}
+          case 7:{Dx[7] = upsample(dx,flag);
+            break;}
+          case 8:{Dx[8] = upsample(dx,flag);
+            break;}
+          case 9:{ Dx[9] = upsample(dx,flag);
+            break;}
+          case 10:{Dx[10] = upsample(dx,flag);
+            break;}
+          case 11:{Dx[11] = upsample(dx,flag);
+            break;}
+          case 12:{Dx[12] = upsample(dx,flag);
+            break;}
+          case 13:{Dx[13] = upsample(dx,flag);
+            break;}
+          case 14:{Dx[14] = upsample(dx,flag);
+            break;}
+          case 15:{Dx[15] = upsample(dx,flag);
+            break;}
+          case 16:{Dx[16] = upsample(dx,flag);
+            break;}
+          case 17:{ Dx[17] = upsample(dx,flag);
+            break;}
+          case 18:{Dx[18] = upsample(dx,flag);
+            break;}
+          case 19:{Dx[19] = upsample(dx,flag);
+            break;}
+          case 20:{Dx[20] = upsample(dx,flag);
+            break;}
+          case 21:{Dx[21] = upsample(dx,flag);
+            break;}
+          case 22:{Dx[22] = upsample(dx,flag);
+            break;}
+          case 23:{Dx[23] = upsample(dx,flag);
+            break;}
+          case 24:{Dx[24] = upsample(dx,flag);
+            break;}
+          case 25:{Dx[25] = upsample(dx,flag);
+            break;}
+          
+  }
+      
+    }
+    
   	line_no_2++;
   }
-  cout << "line number: " << line_no << endl; 
+  //cout << "line number: " << line_no << endl; 
   infile2.close();   
 
+ 
   image = cv::imread(argv[1]); //cv::imread函数读取指定路径下的图像
-  Eigen::Vector2d u;
-  u << 0,1;
-  upsample(3,3);
+  Eigen::Vector2d uu;
+  uu << 0,1;
+  // upsample(3,3);
   // 判断图像文件是否正确读取
   if (image.data == nullptr) { //数据不存在,可能是文件不存在
     cerr << "文件" << argv[1] << "不存在." << endl;
