@@ -135,7 +135,7 @@ double S=0, Y=0, WGain=0;
         {
             Gr = dx/mr;
             //Gs =  sqrt( (u - x[k])*(u - x[k]) + (v+dim[0]-x[k+sd])*(v+dim[0]-x[k+sd]) );
-            Gs =  ( (u - x[k])*(u - x[k]) + (v+dim[0]-x[k+sd])*(v+dim[0]-x[k+sd]) );
+            Gs =  ( (u - pu)*(u - pu) + (v+dim[0]-pv)*(v+dim[0]-pv) );
             WGain = 1/sqrt(Gs*Gr);
             //mexPrintf("Filter Gain = %f\n",WGain);
             S = S + WGain;

@@ -30,9 +30,8 @@ using namespace std;
 
 
 int main(int argc, char **argv) {
-  double Wp = 0, Gr = 0, Gs = 0,S=0;
-  int flag;
-  int z=0;
+  double Wp, Gr, Gs, S=0,Y=0;
+  double mr=0;
   //int grid=5; // Size of the mask/kernel
   // 读取argv[1]指定的图像
   cv::Mat image;
@@ -115,110 +114,47 @@ int main(int argc, char **argv) {
   //cout << "line number: " << line_no << endl; 
   infile2.close();   
 
-
   double pu = pc_array[line_no_2].u_px; 
   double pv = pc_array[line_no_2].v_px;
   double dx = pc_array[line_no_2].x_3d;
   double dy = pc_array[line_no_2].y_3d;
   double dz = pc_array[line_no_2].z_3d;
-  int u[25],v[25],Dx[25];//change
+  double mr=0;
+
+  for (int k=0; k<line_no; k=k+1){
+   if  (dx > mr) { mr = dx; }// mr=max dx
+}
+
+  int Dx[5][5],z=0;
   
-  for(int i=0;i<111;i++){
-  if((pu>i*5)&&(pu<5+i*5)&&(pv>i*5)&&(pv<5+i*5)){
-    for(z=0;z++;){
-      u[z] = pu;
-      v[z] = pv;
-    } //z points in 5*5
-    
-  }
-  else
-  {break;}
+  for(int i=0;i<111;i++){//first 5*5
 
-  for(int j=0;j<z;j++){//j is the number of points in 5*5.!=25
-    
+  for(int v=0;v<5;v++){
+    for(int u=0;u<5;u++){
 
-  if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>i)&&(v[j]<(i+1))) flag=1;
-  if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=2;
-  if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=3;
-  if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=4;
-  if((u[j]>i)&&(u[j]<(i+1))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=5;
-  if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>i)&&(v[j]<(i+1))) flag=6;
-  if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=7;
-  if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=8;
-  if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=9;
-  if((u[j]>(i+1))&&(u[j]<(i+2))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=10;
-  if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>i)&&(v[j]<(i+1))) flag=11;
-  if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=12;
-  if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=13;
-  if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=14;
-  if((u[j]>(i+2))&&(u[j]<(i+3))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=15;
-  if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>i)&&(v[j]<(i+1))) flag=16;
-  if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=17;
-  if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=18;
-  if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=19;
-  if((u[j]>(i+3))&&(u[j]<(i+4))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=20;
-  if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>i)&&(v[j]<(i+1))) flag=21;
-  if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+1))&&(v[j]<(i+2))) flag=22;
-  if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+2))&&(v[j]<(i+3))) flag=23;
-  if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+3))&&(v[j]<(i+4))) flag=24;
-  if((u[j]>(i+4))&&(u[j]<(i+5))&&(v[j]>(i+4))&&(v[j]<(i+5))) flag=25;
+      S=0;Y=0;
 
-  switch(flag){
-    case 1:{ Dx[1] = upsample(dx,flag);
-      break;}
-    case 2:{Dx[2] = upsample(dx,flag);
-      break;}
-    case 3:{Dx[3] = upsample(dx,flag);
-      break;}
-    case 4:{Dx[4] = upsample(dx,flag);
-      break;}
-    case 5:{Dx[5] = upsample(dx,flag);
-      break;}
-    case 6:{Dx[6] = upsample(dx,flag);
-      break;}
-    case 7:{Dx[7] = upsample(dx,flag);
-      break;}
-    case 8:{Dx[8] = upsample(dx,flag);
-      break;}
-    case 9:{ Dx[9] = upsample(dx,flag);
-      break;}
-    case 10:{Dx[10] = upsample(dx,flag);
-      break;}
-    case 11:{Dx[11] = upsample(dx,flag);
-      break;}
-    case 12:{Dx[12] = upsample(dx,flag);
-      break;}
-    case 13:{Dx[13] = upsample(dx,flag);
-      break;}
-    case 14:{Dx[14] = upsample(dx,flag);
-      break;}
-    case 15:{Dx[15] = upsample(dx,flag);
-      break;}
-    case 16:{Dx[16] = upsample(dx,flag);
-      break;}
-    case 17:{ Dx[17] = upsample(dx,flag);
-      break;}
-    case 18:{Dx[18] = upsample(dx,flag);
-      break;}
-    case 19:{Dx[19] = upsample(dx,flag);
-      break;}
-    case 20:{Dx[20] = upsample(dx,flag);
-      break;}
-    case 21:{Dx[21] = upsample(dx,flag);
-      break;}
-    case 22:{Dx[22] = upsample(dx,flag);
-      break;}
-    case 23:{Dx[23] = upsample(dx,flag);
-      break;}
-    case 24:{Dx[24] = upsample(dx,flag);
-      break;}
-    case 25:{Dx[25] = upsample(dx,flag);
-      break;}
+      if((pu>i*5)&&(pu<5+i*5)&&(pv>i*5)&&(pv<5+i*5)){
+        z++;
+      //restore pu and pv in 5*5
+      }
+
+      for(int j=0;j<z;j++){
+        if(pu>i && pu<(1+i) && pv > i &&pv < (1+i)){//pu and pv in 5*5
+        Gr = dx/mr;
+        Gs =  ( (u - pu)*(u - pu) + (v-pv)*(v-pv) );//ij=uv
+        Wp = 1/sqrt(Gs*Gr);
+        S = S + Wp;
+        Y = Y + Wp*(dx);
+        }
+      }
+      
+    if (S==0) {S=1;}
+    Dx[v][u] = Y/S;
     }
-        
+  }        
   }
     
- 
   image = cv::imread(argv[1]); //cv::imread函数读取指定路径下的图像
   Eigen::Vector2d uu;
   uu << 0,1;
@@ -279,3 +215,4 @@ int main(int argc, char **argv) {
   cv::destroyAllWindows();
   return 0;
 }
+
