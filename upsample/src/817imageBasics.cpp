@@ -129,24 +129,51 @@ int main(int argc, char **argv) {
   
   for(int i=0;i<111;i++){//first 5*5
 
-  for(int v=0;v<5;v++){
-    for(int u=0;u<5;u++){
 
-      S=0;Y=0;
+      vector<pointcoordinate> pc_array_zonei;	//Five coordinates for each point
+   //pc_array_zonei.swap(vector<pointcoordinate>());
 
+     for(int i_pc = 0; i_pc < pc_array.size(); i_pc++){
+         double pu = pc_array[i_pc].u_px; 
+  double pv = pc_array[i_pc].v_px;
+  double dx = pc_array[i_pc].x_3d;
+  double dy = pc_array[i_pc].y_3d;
+  double dz = pc_array[i_pc].z_3d;
       if((pu>i*5)&&(pu<5+i*5)&&(pv>i*5)&&(pv<5+i*5)){
         z++;
       //restore pu and pv in 5*5
+        	pointcoordinate thispoint_zone;
+          thispoint_zone.u_px = pu;
+          thispoint_zone.v_px = pv;
+  	thispoint_zone.x_3d = dx;
+  	thispoint_zone.y_3d = dy;
+  	thispoint_zone.z_3d = dz;//3D coordinates
+  	thispoint_zone.print();
+    pc_array_zonei.push_back(thispoint_zone); 
+      
       }
+     }
+  for(int v=5*i;v<(5+5*i);v++){//i
+    for(int u=5*i;u<(5+5*i);u++){
 
-      for(int j=0;j<z;j++){
-        if(pu>i && pu<(1+i) && pv > i &&pv < (1+i)){//pu and pv in 5*5
+      S=0;Y=0;
+
+
+     
+
+      for(int j=0;j< pc_array_zonei.size();j++){
+        double pu = pc_array_zonei[j].u_px;
+        double pv = pc_array_zonei[j].v_px;
+        double dx = pc_array_zonei[j].x_3d;
+        double dy = pc_array_zonei[j].y_3d;
+        double dz = pc_array_zonei[j].z_3d;
+        //pu and pv in 5*5
         Gr = dx/mr;
         Gs =  ( (u - pu)*(u - pu) + (v-pv)*(v-pv) );//ij=uv
         Wp = 1/sqrt(Gs*Gr);
         S = S + Wp;
         Y = Y + Wp*(dx);
-        }
+        
       }
       
     if (S==0) {S=1;}

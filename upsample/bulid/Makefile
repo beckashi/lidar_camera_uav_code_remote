@@ -123,60 +123,6 @@ imageBasics/fast:
 	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/build
 .PHONY : imageBasics/fast
 
-src/imageBasics.o: src/imageBasics.cpp.o
-
-.PHONY : src/imageBasics.o
-
-# target to build an object file
-src/imageBasics.cpp.o:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o
-.PHONY : src/imageBasics.cpp.o
-
-src/imageBasics.i: src/imageBasics.cpp.i
-
-.PHONY : src/imageBasics.i
-
-# target to preprocess a source file
-src/imageBasics.cpp.i:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/imageBasics.cpp.i
-.PHONY : src/imageBasics.cpp.i
-
-src/imageBasics.s: src/imageBasics.cpp.s
-
-.PHONY : src/imageBasics.s
-
-# target to generate assembly for a file
-src/imageBasics.cpp.s:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/imageBasics.cpp.s
-.PHONY : src/imageBasics.cpp.s
-
-src/upsample.o: src/upsample.cpp.o
-
-.PHONY : src/upsample.o
-
-# target to build an object file
-src/upsample.cpp.o:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/upsample.cpp.o
-.PHONY : src/upsample.cpp.o
-
-src/upsample.i: src/upsample.cpp.i
-
-.PHONY : src/upsample.i
-
-# target to preprocess a source file
-src/upsample.cpp.i:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/upsample.cpp.i
-.PHONY : src/upsample.cpp.i
-
-src/upsample.s: src/upsample.cpp.s
-
-.PHONY : src/upsample.s
-
-# target to generate assembly for a file
-src/upsample.cpp.s:
-	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/upsample.cpp.s
-.PHONY : src/upsample.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +132,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... imageBasics"
 	@echo "... edit_cache"
-	@echo "... src/imageBasics.o"
-	@echo "... src/imageBasics.i"
-	@echo "... src/imageBasics.s"
-	@echo "... src/upsample.o"
-	@echo "... src/upsample.i"
-	@echo "... src/upsample.s"
 .PHONY : help
 
 
