@@ -57,7 +57,91 @@ include CMakeFiles/imageBasics.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/imageBasics.dir/flags.make
 
-CMakeFiles/imageBasics.dir/requires:
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o: CMakeFiles/imageBasics.dir/flags.make
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o: ../src/imageBasics.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o -c /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/imageBasics.cpp
+
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/imageBasics.dir/src/imageBasics.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/imageBasics.cpp > CMakeFiles/imageBasics.dir/src/imageBasics.cpp.i
+
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/imageBasics.dir/src/imageBasics.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/imageBasics.cpp -o CMakeFiles/imageBasics.dir/src/imageBasics.cpp.s
+
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.requires:
+
+.PHONY : CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.requires
+
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.provides: CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.requires
+	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.provides.build
+.PHONY : CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.provides
+
+CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.provides.build: CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o
+
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.o: CMakeFiles/imageBasics.dir/flags.make
+CMakeFiles/imageBasics.dir/src/upsample.cpp.o: ../src/upsample.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/imageBasics.dir/src/upsample.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/imageBasics.dir/src/upsample.cpp.o -c /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/upsample.cpp
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/imageBasics.dir/src/upsample.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/upsample.cpp > CMakeFiles/imageBasics.dir/src/upsample.cpp.i
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/imageBasics.dir/src/upsample.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/becka/vstest/lidar_camera_uav_code_remote/upsample/src/upsample.cpp -o CMakeFiles/imageBasics.dir/src/upsample.cpp.s
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.o.requires:
+
+.PHONY : CMakeFiles/imageBasics.dir/src/upsample.cpp.o.requires
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.o.provides: CMakeFiles/imageBasics.dir/src/upsample.cpp.o.requires
+	$(MAKE) -f CMakeFiles/imageBasics.dir/build.make CMakeFiles/imageBasics.dir/src/upsample.cpp.o.provides.build
+.PHONY : CMakeFiles/imageBasics.dir/src/upsample.cpp.o.provides
+
+CMakeFiles/imageBasics.dir/src/upsample.cpp.o.provides.build: CMakeFiles/imageBasics.dir/src/upsample.cpp.o
+
+
+# Object files for target imageBasics
+imageBasics_OBJECTS = \
+"CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o" \
+"CMakeFiles/imageBasics.dir/src/upsample.cpp.o"
+
+# External object files for target imageBasics
+imageBasics_EXTERNAL_OBJECTS =
+
+imageBasics: CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o
+imageBasics: CMakeFiles/imageBasics.dir/src/upsample.cpp.o
+imageBasics: CMakeFiles/imageBasics.dir/build.make
+imageBasics: /usr/local/lib/libopencv_dnn.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_gapi.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_highgui.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_ml.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_objdetect.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_photo.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_stitching.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_video.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_videoio.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_imgcodecs.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_calib3d.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_features2d.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_flann.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_imgproc.so.4.4.0
+imageBasics: /usr/local/lib/libopencv_core.so.4.4.0
+imageBasics: CMakeFiles/imageBasics.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable imageBasics"
+	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/imageBasics.dir/link.txt --verbose=$(VERBOSE)
+
+# Rule to build all files generated by this target.
+CMakeFiles/imageBasics.dir/build: imageBasics
+
+.PHONY : CMakeFiles/imageBasics.dir/build
+
+CMakeFiles/imageBasics.dir/requires: CMakeFiles/imageBasics.dir/src/imageBasics.cpp.o.requires
+CMakeFiles/imageBasics.dir/requires: CMakeFiles/imageBasics.dir/src/upsample.cpp.o.requires
 
 .PHONY : CMakeFiles/imageBasics.dir/requires
 
