@@ -190,6 +190,12 @@ imageBasics_BINARY_DIR:STATIC=/home/becka/vstest/lidar_camera_uav_code_remote/up
 //Value Computed by CMake
 imageBasics_SOURCE_DIR:STATIC=/home/becka/vstest/lidar_camera_uav_code_remote/upsample
 
+//Value Computed by CMake
+test_BINARY_DIR:STATIC=/home/becka/vstest/lidar_camera_uav_code_remote/upsample/bulid
+
+//Value Computed by CMake
+test_SOURCE_DIR:STATIC=/home/becka/vstest/lidar_camera_uav_code_remote/upsample
+
 
 ########################
 # INTERNAL cache entries

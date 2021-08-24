@@ -36,8 +36,10 @@ int main(int argc, char **argv) {
   cv::Mat image;
   cv::Mat image1;
 	
-  ifstream infile;
-  infile.open("velo_data", ios::in);
+  for(int v=0;v<24;v++){
+    ifstream infile;
+  char filename = sprintf("\\matlab\\data\\%10d.pngvelo_data", (const char(*))v);
+  infile.open((const char *)filename, ios::in);
   
   if (!infile.is_open())
   {
@@ -77,7 +79,9 @@ int main(int argc, char **argv) {
   infile.close(); //close file stream 
 
   ifstream infile2;
-  infile2.open("velo_img_data", ios::in);
+  char filename2 = sprintf("\\matlab\\data\\%10d.pngvelo_img_data", (const char(*))v);
+  infile2.open((const char *)filename2, ios::in);
+  //infile2.open("velo_img_data", ios::in);
   
   if (!infile2.is_open())
   {
@@ -232,18 +236,6 @@ int main(int argc, char **argv) {
             Y_x = Y_x + Wp_x*(dx);
             Y_y = Y_y + Wp_y*(dy);
             Y_z = Y_z + Wp_z*(dz);
-             cout << "mr_z " << (double) mr_z << endl;
-            cout << "dy " << (double) dy << endl;
-            cout << "dz " << (double) dz << endl;
-            cout << "Gr_z " << (double) Gr_z << endl;
-            cout << "Gs " << (double) Gs << endl;
-            cout << "Wp_y " << (double) Wp_y << endl;
-            cout << "Wp_z " << (double) Wp_z << endl;
-            cout << "S_z " << (double) S_z << endl;
-           
-            
-            cout << "Y_z  " << (double) Y_z  << endl;
-            cout << "Dz_i " << (double) Dz_i << endl;
           }
       
           if (S_x==0) {S_x=1;}
@@ -259,8 +251,8 @@ int main(int argc, char **argv) {
           data_ptr[0] = Dx_i; // data为I(x,y)第c个通道的值
           data_ptr[1] = Dy_i; // data为I(x,y)第c个通道的值
           data_ptr[2] = Dz_i; // data为I(x,y)第c个通道的值
-          // cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
-          // cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
+          cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
+          cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
           cout << "z_row: " << v << ", z_column: " << u << ", z_value: " << (unsigned int) data_ptr[2] << endl;
           
           
@@ -285,12 +277,15 @@ int main(int argc, char **argv) {
   cv::Mat channel[3];
   cv::split(image_upsample, channel);//split into three channels
 
+  char pic1 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_0.png",(const char(*))v);
+  char pic2 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_1.png",(const char(*))v);
+  char pic3 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_2.png",(const char(*))v);
   cv::imshow("x of image_upsample", channel[0]);
-  cv::imwrite("upsamplesave_0.png", channel[0]); //save the image 
+  cv::imwrite((const char *)pic1, channel[0]); //save the image 
   cv::imshow("y of image_upsample", channel[1]);
-  cv::imwrite("upsamplesave_1.png", channel[1]); //save the image 
+  cv::imwrite((const char *)pic2, channel[1]); //save the image 
   cv::imshow("z of image_upsample", channel[2]);
-  cv::imwrite("upsamplesave_2.png", channel[2]); //save the image 
+  cv::imwrite((const char *)pic3, channel[2]); //save the image 
 
   cv::waitKey(0);
   
@@ -315,3 +310,4 @@ int main(int argc, char **argv) {
   return 0;
 }
 
+}
