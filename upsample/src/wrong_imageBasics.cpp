@@ -36,20 +36,15 @@ int main(int argc, char **argv) {
   cv::Mat image;
   cv::Mat image1;
 	
-  for(int v=0;v<4;v++){
+  for(int v=0;v<24;v++){
     ifstream infile;
-  char filename[50];
-  // sprintf(filename, "matlab\\data\\%010d.pngvelo_data", v);
-  sprintf(filename, "%010d.pngvelo_data", v);
-  //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
-  infile.open(filename, ios::in);
-  cout << "filename1:" << filename << endl;
-
+  char filename = sprintf("\\matlab\\data\\%10d.pngvelo_data", (const char(*))v);
+  infile.open((const char *)filename, ios::in);
+  
   if (!infile.is_open())
   {
-  	cout << "read file1 failed" << endl;
+  	cout << "read file failed" << endl;
   }
-
   //input as string.
   string buf;
   unsigned long line_no = 0;	
@@ -84,17 +79,13 @@ int main(int argc, char **argv) {
   infile.close(); //close file stream 
 
   ifstream infile2;
-  char filename2[50];
-  // sprintf(filename, "matlab\\data\\%010d.pngvelo_data", v);
-  sprintf(filename2, "%010d.pngvelo_img_data", v);
-  //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
-  infile2.open(filename2, ios::in);
-  cout << "filename2:" << filename2 << endl;
+  char filename2 = sprintf("\\matlab\\data\\%10d.pngvelo_img_data", (const char(*))v);
+  infile2.open((const char *)filename2, ios::in);
   //infile2.open("velo_img_data", ios::in);
   
   if (!infile2.is_open())
   {
-  	cout << "read file2 failed" << endl;
+  	cout << "read file failed" << endl;
   }
   //input as string. 
   string buf2;
@@ -245,7 +236,7 @@ int main(int argc, char **argv) {
             Y_x = Y_x + Wp_x*(dx);
             Y_y = Y_y + Wp_y*(dy);
             Y_z = Y_z + Wp_z*(dz);
-            
+
           }
       
           if (S_x==0) {S_x=1;}
@@ -261,11 +252,12 @@ int main(int argc, char **argv) {
           data_ptr[0] = Dx_i; // data为I(x,y)第c个通道的值
           data_ptr[1] = Dy_i; // data为I(x,y)第c个通道的值
           data_ptr[2] = Dz_i; // data为I(x,y)第c个通道的值
-
           cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
           cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
           cout << "z_row: " << v << ", z_column: " << u << ", z_value: " << (unsigned int) data_ptr[2] << endl;
-    
+          
+          
+
          // cout << "current data vaule: " << Dx[v][u] << endl;
 		}
 	  }
@@ -286,30 +278,17 @@ int main(int argc, char **argv) {
   cv::Mat channel[3];
   cv::split(image_upsample, channel);//split into three channels
 
- char pic1[50];
- char pic2[50];
- char pic3[50];
- sprintf(pic1, "savepic\\%02d\\upsamplesave_0.png",v);
- sprintf(pic2, "savepic\\%02d\\upsamplesave_1.png",v);
- sprintf(pic3, "savepic\\%02d\\upsamplesave_2.png",v);
- cv::imshow("x of image_upsample", channel[0]);
- cv::imwrite(pic1, channel[0]); //save the image 
- cv::imshow("y of image_upsample", channel[1]);
- cv::imwrite(pic2, channel[1]); //save the image 
- cv::imshow("z of image_upsample", channel[2]);
- cv::imwrite(pic3, channel[2]); //save the image 
-  
+  char pic1 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_0.png",(const char(*))v);
+  char pic2 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_1.png",(const char(*))v);
+  char pic3 = sprintf("..\\bulid\\savepic\\%02d\\upsamplesave_2.png",(const char(*))v);
+  cv::imshow("x of image_upsample", channel[0]);
+  cv::imwrite((const char *)pic1, channel[0]); //save the image 
+  cv::imshow("y of image_upsample", channel[1]);
+  cv::imwrite((const char *)pic2, channel[1]); //save the image 
+  cv::imshow("z of image_upsample", channel[2]);
+  cv::imwrite((const char *)pic3, channel[2]); //save the image 
 
-  // string pic1 = "..\\bulid\\savepic\\%02d\\upsamplesave_0.png" + to_string(v);
-  // string pic2 = "..\\bulid\\savepic\\%02d\\upsamplesave_1.png" + to_string(v);
-  // string pic3 = "..\\bulid\\savepic\\%02d\\upsamplesave_2.png" + to_string(v);
-  // cv::imshow("x of image_upsample", channel[0]);
-  // cv::imwrite("upsamplesave_0.png", channel[0]); //save the image 
-  // cv::imshow("y of image_upsample", channel[1]);
-  // cv::imwrite("upsamplesave_1.png", channel[1]); //save the image 
-  // cv::imshow("z of image_upsample", channel[2]);
-  // cv::imwrite("upsamplesave_2.png", channel[2]); //save the image 
-
+  cv::waitKey(0);
   
 
   /*// 关于 cv::Mat 的拷贝
@@ -328,9 +307,8 @@ int main(int argc, char **argv) {
   cv::waitKey(0);*/
 
   // 对于图像还有很多基本的操作,如剪切,旋转,缩放等,限于篇幅就不一一介绍了,请参看OpenCV官方文档查询每个函数的调用方法.
-  
-}
-  cv::waitKey(0);
-cv::destroyAllWindows();
+  cv::destroyAllWindows();
   return 0;
+}
+
 }
