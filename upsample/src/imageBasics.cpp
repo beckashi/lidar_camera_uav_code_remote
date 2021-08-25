@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
     cerr << "文件" << argv[1] << "不存在." << endl;
     return 0;
   }
-
+  argv++;
   // 文件顺利读取, 首先输出一些基本信息
   cout << "图像宽为" << image.cols << ",高为" << image.rows << ",通道数为" << image.channels() << endl;
   cv::imshow("image", image);      // 用cv::imshow显示图像
@@ -162,27 +162,7 @@ int main(int argc, char **argv) {
 //    }
 //  }
   cv::Mat image_upsample  = image.clone();//clone original image used for upsampling
-//  double pu = pc_array[line_no_2].u_px; 
-//  double pv = pc_array[line_no_2].v_px;
-//  double dx = pc_array[line_no_2].x_3d;
-//  double dy = pc_array[line_no_2].y_3d;
-//  double dz = pc_array[line_no_2].z_3d;
-//  //double mr=0;
-  
-  for (int k=0; k<line_no; k=k+1){
-    //double pu = pc_array[k].u_px; 
-    //double pv = pc_array[k].v_px;
-    double dx = pc_array[k].x_3d;
-    double dy = pc_array[k].y_3d;
-    double dz = pc_array[k].z_3d;
-    //double mr=0;
-  if  (dx > mr_x) { mr_x = dx; }// mr=max dx
-  if  (dy> mr_y) { mr_y = dy; }// mr=max dx
-  if  (dz > mr_z) { mr_z = dz; }// mr=max dx
-  }
-    cout << "mr_x: " << mr_x << endl; 
-    cout << "mr_y: " << mr_y << endl; 
-    cout << "mr_z: " << mr_z << endl; 
+
  // unsigned int Dx[5][5], z=0, 
   unsigned int Dx_i;
   unsigned int Dy_i;
@@ -202,6 +182,7 @@ int main(int argc, char **argv) {
       double dx = pc_array[i_pc].x_3d;
       double dy = pc_array[i_pc].y_3d;
       double dz = pc_array[i_pc].z_3d;
+
       if((pu >= pu_ori_zone)&&(pu < 5 + pu_ori_zone)&&(pv >= pv_ori_zone)&&(pv < 5 + pv_ori_zone)){
           //z++;
         //restore pu and pv in 5*5
@@ -217,6 +198,17 @@ int main(int argc, char **argv) {
         cout << "test" << endl; 
 	    }	
 	  }
+
+  //max-value in 5*5
+    for (int k=0; k<pc_array_zonei.size(); k=k+1){
+    double dx = pc_array_zonei[k].x_3d;
+    double dy = pc_array_zonei[k].y_3d;
+    double dz = pc_array_zonei[k].z_3d;
+
+  if  (dx > mr_x) { mr_x = dx; }
+  if  (dy> mr_y) { mr_y = dy; }
+  if  (dz > mr_z) { mr_z = dz; }
+  }
       
 	  //upsampling process: 
 	  for(int v = pv_ori_zone; v < 5 + pv_ori_zone; v++){
@@ -289,9 +281,9 @@ int main(int argc, char **argv) {
  char pic1[50];
  char pic2[50];
  char pic3[50];
- sprintf(pic1, "savepic\\%02d\\upsamplesave_0.png",v);
- sprintf(pic2, "savepic\\%02d\\upsamplesave_1.png",v);
- sprintf(pic3, "savepic\\%02d\\upsamplesave_2.png",v);
+ sprintf(pic1, "./savepic/%02d/1upsamplesave_0.png",v);
+ sprintf(pic2, "./savepic/%02d/1upsamplesave_1.png",v);
+ sprintf(pic3, "./savepic/%02d/1upsamplesave_2.png",v);
  cv::imshow("x of image_upsample", channel[0]);
  cv::imwrite(pic1, channel[0]); //save the image 
  cv::imshow("y of image_upsample", channel[1]);
