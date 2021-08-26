@@ -281,9 +281,9 @@ int main(int argc, char **argv) {
  char pic1[50];
  char pic2[50];
  char pic3[50];
- sprintf(pic1, "./savepic/%02d/1upsamplesave_0.png",v);
- sprintf(pic2, "./savepic/%02d/1upsamplesave_1.png",v);
- sprintf(pic3, "./savepic/%02d/1upsamplesave_2.png",v);
+ sprintf(pic1, "./savepic/%02dupsamplesave_0.png",v);
+ sprintf(pic2, "./savepic/%02dupsamplesave_1.png",v);
+ sprintf(pic3, "./savepic/%02dupsamplesave_2.png",v);
  cv::imshow("x of image_upsample", channel[0]);
  cv::imwrite(pic1, channel[0]); //save the image 
  cv::imshow("y of image_upsample", channel[1]);
