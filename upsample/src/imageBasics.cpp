@@ -23,6 +23,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <Eigen/Dense>
 
+#include <opencv2/opencv.hpp>
 #include "upsample.h"
 #include "imageBasics.h"
 
@@ -34,13 +35,13 @@ int main(int argc, char **argv) {
   //int grid=5; // Size of the mask/kernel
   // 读取argv[1]指定的图像
   cv::Mat image;
-  cv::Mat image1;
+  cv::Mat image_upsample_grey;
 	
-  for(int v=0;v<4;v++){
+  for(int v=0;v<2;v++){
     ifstream infile;
   char filename[50];
-  // sprintf(filename, "matlab\\data\\%010d.pngvelo_data", v);
-  sprintf(filename, "%010d.pngvelo_data", v);
+  sprintf(filename, "./matlab/data/%010d.pngvelo_data", v);
+  // sprintf(filename, "%010d.pngvelo_data", v);
   //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
   infile.open(filename, ios::in);
   cout << "filename1:" << filename << endl;
@@ -85,8 +86,7 @@ int main(int argc, char **argv) {
 
   ifstream infile2;
   char filename2[50];
-  // sprintf(filename, "matlab\\data\\%010d.pngvelo_data", v);
-  sprintf(filename2, "%010d.pngvelo_img_data", v);
+  sprintf(filename2, "./matlab/data/%010d.pngvelo_img_data", v);
   //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
   infile2.open(filename2, ios::in);
   cout << "filename2:" << filename2 << endl;
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 //  }
   cv::Mat image_upsample  = image.clone();//clone original image used for upsampling
 
- // unsigned int Dx[5][5], z=0, 
+ // unsigned int Dx[5][5], z=0, S
   unsigned int Dx_i;
   unsigned int Dy_i;
   unsigned int Dz_i;
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
         thispoint_zone = pc_array[i_pc];
         thispoint_zone.print();
         pc_array_zonei.push_back(thispoint_zone); 
-        cout << "test" << endl; 
+        // cout << "test" << endl; 
 	    }	
 	  }
 
@@ -254,9 +254,9 @@ int main(int argc, char **argv) {
           data_ptr[1] = Dy_i; // data为I(x,y)第c个通道的值
           data_ptr[2] = Dz_i; // data为I(x,y)第c个通道的值
 
-          cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
-          cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
-          cout << "z_row: " << v << ", z_column: " << u << ", z_value: " << (unsigned int) data_ptr[2] << endl;
+          // cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
+          // cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
+          // cout << "z_row: " << v << ", z_column: " << u << ", z_value: " << (unsigned int) data_ptr[2] << endl;
     
          // cout << "current data vaule: " << Dx[v][u] << endl;
 		}
@@ -272,8 +272,12 @@ int main(int argc, char **argv) {
   chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
   chrono::duration<double> time_used = chrono::duration_cast < chrono::duration < double >> (t2 - t1);
   cout << "Total time in upsampling: " << time_used.count() << " s." << endl;
-  
-  cv::imshow("image_upsample", image_upsample);
+
+  char pic0[50];
+  sprintf(pic0, "./savepic/%02dimage_upsample.png",v);
+  cv::cvtColor(image_upsample, image_upsample_grey, cv::COLOR_BGR2GRAY);
+  cv::imshow("image_upsample", image_upsample_grey);
+  cv::imwrite(pic0, image_upsample_grey); //save the image 
   cv::waitKey(0);
   cv::Mat channel[3];
   cv::split(image_upsample, channel);//split into three channels
@@ -281,9 +285,10 @@ int main(int argc, char **argv) {
  char pic1[50];
  char pic2[50];
  char pic3[50];
- sprintf(pic1, "./savepic/%02d/1upsamplesave_0.png",v);
- sprintf(pic2, "./savepic/%02d/1upsamplesave_1.png",v);
- sprintf(pic3, "./savepic/%02d/1upsamplesave_2.png",v);
+ sprintf(pic1, "./savepic/%02dupsamplesave_0.png",v);
+ sprintf(pic2, "./savepic/%02dupsamplesave_1.png",v);
+ sprintf(pic3, "./savepic/%02dupsamplesave_2.png",v);
+
  cv::imshow("x of image_upsample", channel[0]);
  cv::imwrite(pic1, channel[0]); //save the image 
  cv::imshow("y of image_upsample", channel[1]);
@@ -295,13 +300,6 @@ int main(int argc, char **argv) {
   // string pic1 = "..\\bulid\\savepic\\%02d\\upsamplesave_0.png" + to_string(v);
   // string pic2 = "..\\bulid\\savepic\\%02d\\upsamplesave_1.png" + to_string(v);
   // string pic3 = "..\\bulid\\savepic\\%02d\\upsamplesave_2.png" + to_string(v);
-  // cv::imshow("x of image_upsample", channel[0]);
-  // cv::imwrite("upsamplesave_0.png", channel[0]); //save the image 
-  // cv::imshow("y of image_upsample", channel[1]);
-  // cv::imwrite("upsamplesave_1.png", channel[1]); //save the image 
-  // cv::imshow("z of image_upsample", channel[2]);
-  // cv::imwrite("upsamplesave_2.png", channel[2]); //save the image 
-
   
 
   /*// 关于 cv::Mat 的拷贝
