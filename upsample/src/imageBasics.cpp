@@ -288,10 +288,6 @@ int main(int argc, char **argv) {
  sprintf(pic1, "./savepic/%02dupsamplesave_0.png",v);
  sprintf(pic2, "./savepic/%02dupsamplesave_1.png",v);
  sprintf(pic3, "./savepic/%02dupsamplesave_2.png",v);
-<<<<<<< HEAD
-
-=======
->>>>>>> a49a25e9ba121f88b4c35bda34766d283142a398
  cv::imshow("x of image_upsample", channel[0]);
  cv::imwrite(pic1, channel[0]); //save the image 
  cv::imshow("y of image_upsample", channel[1]);
