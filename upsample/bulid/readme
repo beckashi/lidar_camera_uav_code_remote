@@ -1,4 +1,20 @@
-run with :
+run :
 cmake ..
 make
-./imageBasics 1.png 2.png 3.png 4.png
+./imageBasics 000.png 001.png
+
+
+bulid/
+000.png and 001.png are original pictures.
+00, 01,02,03,04.png are road pictures used for testing.
+1,2,3,4,5.png are wrong pictures.
+
+bulid/ori_pic_data/
+more original pictures 
+
+
+bulid/matlab/data/
+input files of 5 coordinates
+
+bulid/datapic_roadtest/
+data and pictures used for testing.
