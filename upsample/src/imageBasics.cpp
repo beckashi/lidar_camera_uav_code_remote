@@ -211,8 +211,8 @@ int main(int argc, char **argv) {
   }
       
 	  //upsampling process: 
-	  for(int v = pv_ori_zone; v < 5 + pv_ori_zone; v++){
-        for(int u = pu_ori_zone; u < 5 + pu_ori_zone; u++){
+	  for(int v = pv_ori_zone; v < (5 + pv_ori_zone); v++){
+        for(int u = pu_ori_zone; u < (5 + pu_ori_zone); u++){
 		
             S_x=0;Y_x=0;
             S_y=0;Y_y=0;
@@ -228,15 +228,16 @@ int main(int argc, char **argv) {
             Gr_y = dy/mr_y;
             Gr_z = dz/mr_z;
             Gs =  ( (u - pu)*(u - pu) + (v-pv)*(v-pv) );//ij=uv
-            Wp_x = 1/sqrt(Gs*fabs(Gr_x));
+
+            Wp_x = 1/sqrt(Gs*fabs(Gr_x));//>0
             Wp_y = 1/sqrt(Gs*fabs(Gr_y));
-            Wp_z = 1/sqrt(Gs*fabs(Gr_z));/// dz has negative value.
-            S_x = S_x + Wp_x;
+            Wp_z = 1/sqrt(Gs*fabs(Gr_z));
+            S_x = S_x + Wp_x;//>0
             S_y = S_y + Wp_y;
             S_z = S_z + Wp_z;
-            Y_x = Y_x + Wp_x*(dx);
-            Y_y = Y_y + Wp_y*(dy);
-            Y_z = Y_z + Wp_z*(dz);
+            Y_x = Y_x + Wp_x*(-fabs(dx));//<0
+            Y_y = Y_y + Wp_y*(-fabs(dy));
+            Y_z = Y_z + Wp_z*(-fabs(dz));
             
           }
       
@@ -244,7 +245,7 @@ int main(int argc, char **argv) {
           if (S_y==0) {S_y=1;}
           if (S_z==0) {S_z=1;}
 
-          Dx_i = Y_x/S_x;
+          Dx_i = Y_x/S_x;//<0
           Dy_i = Y_y/S_y;
           Dz_i = Y_z/S_z;
         
