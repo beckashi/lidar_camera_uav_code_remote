@@ -32,17 +32,14 @@ using namespace std;
 int main(int argc, char **argv) {
   double Wp_x, Wp_y, Wp_z, Gr_x, Gr_y, Gr_z, Gs, S_x=0, S_y=0, S_z=0, Y_x=0, Y_y=0, Y_z=0;
   double mr_x=0,mr_y=0, mr_z=0;
-  //int grid=5; // Size of the mask/kernel
-  // 读取argv[1]指定的图像
+  
   cv::Mat image;
   cv::Mat image_upsample_grey;
 	
   for(int v=0;v<2;v++){
     ifstream infile;
   char filename[50];
-  sprintf(filename, "./matlab/data/%010d.pngvelo_data", v);
-  // sprintf(filename, "%010d.pngvelo_data", v);
-  //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
+  sprintf(filename, "./matlab 828/%010d.pngvelo_data", v);
   infile.open(filename, ios::in);
   cout << "filename1:" << filename << endl;
 
@@ -54,15 +51,15 @@ int main(int argc, char **argv) {
   //input as string.
   string buf;
   unsigned long line_no = 0;	
-  vector<pointcoordinate> pc_array;	//Five coordinates for each point
+  vector<pointcoordinate> pc_array;	
+
+  double c_ori_min[3];
   
-  while (getline(infile,buf)) //each line
+  while (getline(infile,buf)) 
   {
-  	//cout << buf << endl;
   	int index = buf.find(",");
-  	//cout << index << endl;
   	int index2 = buf.find(",", index + 1);
-  	int index3 = buf.find(",", index2 + 1);//velo_data 3 colomns
+  	int index3 = buf.find(",", index2 + 1);
   	//cout<< index << "2." << index2 << "3, " << index3 <<  endl; 
   
   	string s1 = buf.substr(0, index);
@@ -70,112 +67,97 @@ int main(int argc, char **argv) {
   	string s3 = buf.substr(index2+1, index3-index2-1);
   	string s4 = buf.substr(index3+1, buf.length()-index3-1);
   	//cout << "s1:" << s1 << ", s2:" << s2 << ", s3: " << s3 << ", s4: " << s4 << endl;
-  	//float of = stof(s1,0);
-  	//cout << "test transfer: " << of << endl; 
+
   	pointcoordinate thispoint;
   	thispoint.x_3d = stof(s1, 0);
   	thispoint.y_3d = stof(s2, 0);
-  	thispoint.z_3d = stof(s3, 0);//3D coordinates
+  	thispoint.z_3d = stof(s3, 0);
   	thispoint.print();
     pc_array.push_back(thispoint); 
+
+  if  (thispoint.x_3d < c_ori_min[0]) { c_ori_min[0] = thispoint.x_3d ; }
+  if  (thispoint.y_3d < c_ori_min[1]) { c_ori_min[1] = thispoint.y_3d ; }
+  if  (thispoint.z_3d < c_ori_min[2]) { c_ori_min[2] = thispoint.z_3d ; }
 
   	line_no++;
   }
   //cout << "line number: " << line_no << endl; 
-  infile.close(); //close file stream 
+  infile.close(); 
+  //close file stream 
+
+
+  cout << "c_ori_min, x:  " << c_ori_min[0] << endl; 
+  cout << "c_ori_min, y:  " << c_ori_min[1] << endl; 
+  cout << "c_ori_min, z:  " << c_ori_min[2] << endl; 
 
   ifstream infile2;
   char filename2[50];
-  sprintf(filename2, "./matlab/data/%010d.pngvelo_img_data", v);
-  //string filename = "\\matlab\\data\\%10d.pngvelo_data" + to_string(v);
+  sprintf(filename2, "./matlab 828/%010d.pngvelo_img_data", v);
   infile2.open(filename2, ios::in);
   cout << "filename2:" << filename2 << endl;
-  //infile2.open("velo_img_data", ios::in);
   
   if (!infile2.is_open())
   {
   	cout << "read file2 failed" << endl;
   }
-  //input as string. 
+
   string buf2;
   unsigned long line_no_2 = 0;	
   
   while (getline(infile2,buf2))
   {
-  	//cout << buf2 << endl;
   	int index = buf2.find(",");
-  	//cout << index << endl;
-  
   	string s1 = buf2.substr(0, index);
-  	string s2 = buf2.substr(index+1, buf2.length()-index-1);//get pixel coodinates
+  	string s2 = buf2.substr(index+1, buf2.length()-index-1);
   	//cout << "s1:" << s1 << ", s2:" << s2 << ", s3: " << s3 << ", s4: " << s4 << endl;
-  	//float of = stof(s1,0);
-  	//cout << "test transfer: " << of << endl; 
-  	/*pointcoordinate thispoint;
-  	thispoint.u_px = stof(s1, 0);
-  	thispoint.v_px = stof(s2, 0);
-  	thispoint.print();*/
-	pc_array[line_no_2].u_px = stof(s1,0); 
-	pc_array[line_no_2].v_px = stof(s2,0); 
-	//cout << "current line number: " << line_no_2 << endl;
-	//pc_array[line_no_2].print();
+    pc_array[line_no_2].u_px = stof(s1,0); 
+    pc_array[line_no_2].v_px = stof(s2,0); 
+    //pc_array[line_no_2].print();
   	line_no_2++;
   }
-  //cout << "line number: " << line_no << endl; 
   infile2.close();   
 
-  image = cv::imread(argv[1]); //cv::imread函数读取指定路径下的图像
+  char filename_ima[50];
+  sprintf(filename_ima, "./%03d.png", v);
+  image = cv::imread(filename_ima);
+
+  // image = cv::imread(argv[1]); 
   Eigen::Vector2d uu;
   uu << 0,1;
-  // upsample(3,3);
-  // 判断图像文件是否正确读取
-  if (image.data == nullptr) { //数据不存在,可能是文件不存在
-    cerr << "文件" << argv[1] << "不存在." << endl;
+ 
+  if (image.data == nullptr) { 
+    cerr << "File" << argv[1] << "does not exist. " << endl;
     return 0;
   }
   argv++;
-  // 文件顺利读取, 首先输出一些基本信息
-  cout << "图像宽为" << image.cols << ",高为" << image.rows << ",通道数为" << image.channels() << endl;
-  cv::imshow("image", image);      // 用cv::imshow显示图像
-  cv::waitKey(0);                  // 暂停程序,等待一个按键输入
+  
+  cout << "width:" << image.cols << ",height: " << image.rows << ",channels:" << image.channels() << endl;
+  cv::imshow("image", image);      
+  cv::waitKey(0);                  
 
-  // 判断image的类型
+ 
   if (image.type() != CV_8UC1 && image.type() != CV_8UC3) {
-    // 图像类型不符合要求
-    cout << "请输入一张彩色图或灰度图." << endl;
+    
+    cout << "Please enter a color image or grayscale image." << endl;
     return 0;
   }
 
-// 遍历图像, 请注意以下遍历方式亦可使用于随机像素访问
-  // 使用 std::chrono 来给算法计时
+//Traverse the image, please note that the following traversal methods can also be used for random pixel access
+  // Use std::chrono to time the algorithm
   chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
-//  for (size_t y = 0; y < image.rows; y++) {
-//    // 用cv::Mat::ptr获得图像的行指针
-//    unsigned char *row_ptr = image.ptr<unsigned char>(y);  // row_ptr是第y行的头指针
-//    for (size_t x = 0; x < image.cols; x++) {
-//      // 访问位于 x,y 处的像素
-//      unsigned char *data_ptr = &row_ptr[x * image.channels()]; // data_ptr 指向待访问的像素数据
-//      // 输出该像素的每个通道,如果是灰度图就只有一个通道
-//      for (int c = 0; c != image.channels(); c++) {
-//        unsigned char data = data_ptr[c]; // data为I(x,y)第c个通道的值
-//      }
-//    }
-//  }
+
   cv::Mat image_upsample  = image.clone();//clone original image used for upsampling
 
- // unsigned int Dx[5][5], z=0, S
   unsigned int Dx_i;
   unsigned int Dy_i;
   unsigned int Dz_i;
   
- // int i = 0;
-  //for(int i=0;i<111;i++){//first 5*5
 
   unsigned long pu_ori_zone = 0, pv_ori_zone = 0; 
    //pc_array_zonei.swap(vector<pointcoordinate>());
   while(pu_ori_zone + 5 < image.cols) {
 	while(pv_ori_zone + 5 < image.rows) {
-      vector<pointcoordinate> pc_array_zonei;	//Five coordinates for each point
+      vector<pointcoordinate> pc_array_zonei;	
       for(int i_pc = 0; i_pc < pc_array.size(); i_pc++){
       double pu = pc_array[i_pc].u_px; 
       double pv = pc_array[i_pc].v_px;
@@ -184,30 +166,26 @@ int main(int argc, char **argv) {
       double dz = pc_array[i_pc].z_3d;
 
       if((pu >= pu_ori_zone)&&(pu < 5 + pu_ori_zone)&&(pv >= pv_ori_zone)&&(pv < 5 + pv_ori_zone)){
-          //z++;
-        //restore pu and pv in 5*5
         pointcoordinate thispoint_zone;
-        /*thispoint_zone.u_px = pu;
-        thispoint_zone.v_px = pv;
-        thispoint_zone.x_3d = dx;
-        thispoint_zone.y_3d = dy;
-        thispoint_zone.z_3d = dz;//3D coordinates*/
+
         thispoint_zone = pc_array[i_pc];
+        thispoint_zone.x_3d = (pc_array[i_pc].x_3d)*10;
+        thispoint_zone.y_3d = (pc_array[i_pc].y_3d - c_ori_min[1])*5;
+        thispoint_zone.z_3d = (pc_array[i_pc].z_3d - c_ori_min[2])*50;
         thispoint_zone.print();
         pc_array_zonei.push_back(thispoint_zone); 
-        // cout << "test" << endl; 
 	    }	
 	  }
 
-  //max-value in 5*5
+  //find the max-value in 5*5.
     for (int k=0; k<pc_array_zonei.size(); k=k+1){
     double dx = pc_array_zonei[k].x_3d;
     double dy = pc_array_zonei[k].y_3d;
     double dz = pc_array_zonei[k].z_3d;
 
-  if  (dx > mr_x) { mr_x = dx; }
-  if  (dy> mr_y) { mr_y = dy; }
-  if  (dz > mr_z) { mr_z = dz; }
+  if  (fabs(dx) > mr_x) { mr_x = fabs(dx); }
+  if  (fabs(dy)> mr_y) { mr_y = fabs(dy); }
+  if  (fabs(dz) > mr_z) { mr_z = fabs(dz); }
   }
       
 	  //upsampling process: 
@@ -223,21 +201,19 @@ int main(int argc, char **argv) {
             double dx = pc_array_zonei[j].x_3d;
             double dy = pc_array_zonei[j].y_3d;
             double dz = pc_array_zonei[j].z_3d;
-            //pu and pv in 5*5
             Gr_x = dx/mr_x;
             Gr_y = dy/mr_y;
             Gr_z = dz/mr_z;
-            Gs =  ( (u - pu)*(u - pu) + (v-pv)*(v-pv) );//ij=uv
-
-            Wp_x = 1/sqrt(Gs*fabs(Gr_x));//>0
-            Wp_y = 1/sqrt(Gs*fabs(Gr_y));
-            Wp_z = 1/sqrt(Gs*fabs(Gr_z));
-            S_x = S_x + Wp_x;//>0
+            Gs =  ( (u - pu)*(u - pu) + (v-pv)*(v-pv) );
+            Wp_x = 1/sqrt(Gs*Gr_x);
+            Wp_y = 1/sqrt(Gs*Gr_y);
+            Wp_z = 1/sqrt(Gs*Gr_z);
+            S_x = S_x + Wp_x;
             S_y = S_y + Wp_y;
             S_z = S_z + Wp_z;
-            Y_x = Y_x + Wp_x*(-fabs(dx));//<0
-            Y_y = Y_y + Wp_y*(-fabs(dy));
-            Y_z = Y_z + Wp_z*(-fabs(dz));
+            Y_x = Y_x + Wp_x*dx;
+            Y_y = Y_y + Wp_y*dy;
+            Y_z = Y_z + Wp_z*dz;
             
           }
       
@@ -245,21 +221,15 @@ int main(int argc, char **argv) {
           if (S_y==0) {S_y=1;}
           if (S_z==0) {S_z=1;}
 
-          Dx_i = Y_x/S_x;//<0
+          Dx_i = Y_x/S_x;
           Dy_i = Y_y/S_y;
           Dz_i = Y_z/S_z;
         
           unsigned char *row_ptr = image_upsample.ptr<unsigned char>(v);  // row_ptr is the pointer pointing to row u
-          unsigned char *data_ptr = &row_ptr[u * image_upsample.channels()]; // data_ptr 指向待访问的像素数据
-          data_ptr[0] = Dx_i; // data为I(x,y)第c个通道的值
-          data_ptr[1] = Dy_i; // data为I(x,y)第c个通道的值
-          data_ptr[2] = Dz_i; // data为I(x,y)第c个通道的值
-
-          // cout << "x_row: " << v << ", x_column: " << u << ", x_value: " << (unsigned int) data_ptr[0] << endl;
-          // cout << "y_row: " << v << ", y_column: " << u << ", y_value: " << (unsigned int) data_ptr[1] << endl;
-          // cout << "z_row: " << v << ", z_column: " << u << ", z_value: " << (unsigned int) data_ptr[2] << endl;
-    
-         // cout << "current data vaule: " << Dx[v][u] << endl;
+          unsigned char *data_ptr = &row_ptr[u * image_upsample.channels()]; // data_ptr points to the pixel data to be accessed
+          data_ptr[0] = Dx_i; 
+          data_ptr[1] = Dy_i; 
+          data_ptr[2] = Dz_i; 
 		}
 	  }
 	  pv_ori_zone = pv_ori_zone + 5;
@@ -286,9 +256,9 @@ int main(int argc, char **argv) {
  char pic1[50];
  char pic2[50];
  char pic3[50];
- sprintf(pic1, "./savepic/%02dupsamplesave_0.png",v);
- sprintf(pic2, "./savepic/%02dupsamplesave_1.png",v);
- sprintf(pic3, "./savepic/%02dupsamplesave_2.png",v);
+ sprintf(pic1, "./matlab 828/%02dupsamplesave_0.png",v);
+ sprintf(pic2, "./matlab 828/%02dupsamplesave_1.png",v);
+ sprintf(pic3, "./matlab 828/%02dupsamplesave_2.png",v);
  cv::imshow("x of image_upsample", channel[0]);
  cv::imwrite(pic1, channel[0]); //save the image 
  cv::imshow("y of image_upsample", channel[1]);
@@ -296,28 +266,6 @@ int main(int argc, char **argv) {
  cv::imshow("z of image_upsample", channel[2]);
  cv::imwrite(pic3, channel[2]); //save the image 
   
-
-  // string pic1 = "..\\bulid\\savepic\\%02d\\upsamplesave_0.png" + to_string(v);
-  // string pic2 = "..\\bulid\\savepic\\%02d\\upsamplesave_1.png" + to_string(v);
-  // string pic3 = "..\\bulid\\savepic\\%02d\\upsamplesave_2.png" + to_string(v);
-  
-
-  /*// 关于 cv::Mat 的拷贝
-  // 直接赋值并不会拷贝数据
-  cv::Mat image_another = image;
-  // 修改 image_another 会导致 image 发生变化
-  //image_another(cv::Rect(0, 0, 100, 100)).setTo(0); // 将左上角100*100的块置零
-  cv::imshow("image_another", image_another);
-  cv::waitKey(0);
-
-  // 使用clone函数来拷贝数据
-  cv::Mat image_clone = image.clone();
-  image_clone(cv::Rect(0, 0, 100, 100)).setTo(255);
-  cv::imshow("image", image);
-  cv::imshow("image_clone", image_clone);
-  cv::waitKey(0);*/
-
-  // 对于图像还有很多基本的操作,如剪切,旋转,缩放等,限于篇幅就不一一介绍了,请参看OpenCV官方文档查询每个函数的调用方法.
   
 }
   cv::waitKey(0);
