@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
   sprintf(filename_ima, "./%03d.png", v);
   image = cv::imread(filename_ima);
 
-  // image = cv::imread(argv[1]); 
+  image = cv::imread(argv[1]); 
   Eigen::Vector2d uu;
   uu << 0,1;
  
