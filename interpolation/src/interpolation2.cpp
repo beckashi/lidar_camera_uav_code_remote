@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Chuanbeibei Shi, Yushu Yu, Mauro Bellone 
+ * Copyright (C) 2021 Chuanbeibei Shi and Yushu Yu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,31 +27,32 @@
 #include "interpolation.h"
 
 using namespace std;
-void interpolation(unsigned int img_count);
 
 int main(int argc, char **argv) {
   
-  interpolation(atoi(argv[1]));
-  
-  return 0;
-}
-
-void interpolation(unsigned int img_count){
   cv::Mat image;
   int flag=3;
-  //for(int v=0;v<122;v++){	
-  for(int v = 0; v < img_count; v++){
+	
+  for(int v=0;v<122;v++){
     char filename_ima[40];
     sprintf(filename_ima, "./dataset/pc/%d/%03d.jpg", flag, v);
   image = cv::imread(filename_ima, cv::IMREAD_GRAYSCALE);
  
+  if (image.data == nullptr) { 
+    cerr << "File" << argv[1] << "does not exist. " << endl;
+    return 0;
+  }
+  argv++;
+  
   cout << "width:" << image.cols << ",height: " << image.rows << ",channels:" << image.channels() << endl;
   cv::imshow("image", image);      
-  cv::waitKey(0);                  
+  // cv::waitKey(0);                  
+
  
   if (image.type() != CV_8UC1 && image.type() != CV_8UC3) {
     
     cout << "Please enter a color image or grayscale image." << endl;
+    return 0;
   }
 
 //Traverse the image, please note that the following traversal methods can also be used for random pixel access
@@ -107,7 +108,8 @@ void interpolation(unsigned int img_count){
  cv::imwrite(pic1, image_interpolation); //save the image 
   
 }
-  cv::waitKey(0);
+  // cv::waitKey(0);
   cv::destroyAllWindows();
+  return 0;
 }
 
