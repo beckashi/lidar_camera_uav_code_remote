@@ -41,13 +41,15 @@ void interpolation(unsigned int img_count){
   int flag=3;
   //for(int v=0;v<122;v++){	
   for(int v = 0; v < img_count; v++){
-    char filename_ima[40];
-    sprintf(filename_ima, "./dataset/pc/%d/%03d.jpg", flag, v);
-  image = cv::imread(filename_ima, cv::IMREAD_GRAYSCALE);
+    char filename_ima[50];
+    // sprintf(filename_ima, "./dataset/pc/%d/%03d.jpg", flag, v);
+    sprintf(filename_ima, "./dataset/pc/pc/Frame_%d_channelxyz.png", v);
+  // image = cv::imread(filename_ima, cv::IMREAD_GRAYSCALE);
+  image = cv::imread(filename_ima);
  
   cout << "width:" << image.cols << ",height: " << image.rows << ",channels:" << image.channels() << endl;
   cv::imshow("image", image);      
-  cv::waitKey(0);                  
+  // cv::waitKey(0);                  
  
   if (image.type() != CV_8UC1 && image.type() != CV_8UC3) {
     
@@ -99,15 +101,13 @@ void interpolation(unsigned int img_count){
   chrono::duration<double> time_used = chrono::duration_cast < chrono::duration < double >> (t2 - t1);
   cout << "Total time in interpolation: " << time_used.count() << " s." << endl;
 
-  char pic0[40];
-
- char pic1[40];
- sprintf(pic1, "./dataset/result/%d/%03d.jpg",flag, v);
+ char pic1[50];
+ sprintf(pic1, "./dataset/result/pcxyz/Frame_%d_channelxyz.png", v);
  cv::imshow("interpolation", image_interpolation);
  cv::imwrite(pic1, image_interpolation); //save the image 
   
 }
-  cv::waitKey(0);
+  // cv::waitKey(0);
   cv::destroyAllWindows();
 }
 
