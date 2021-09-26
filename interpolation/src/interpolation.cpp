@@ -41,9 +41,9 @@ void interpolation(unsigned int img_count){
   int flag=3;
   //for(int v=0;v<122;v++){	
   for(int v = 0; v < img_count; v++){
-    char filename_ima[50];
+    char filename_ima[60];
     // sprintf(filename_ima, "./dataset/pc/%d/%03d.jpg", flag, v);
-    sprintf(filename_ima, "./dataset/pc/pc/Frame_%d_channelxyz.png", v);
+    sprintf(filename_ima, "./dataset/train/3channel_train_pc/Frame_%d_channelxyz.png", v);
   // image = cv::imread(filename_ima, cv::IMREAD_GRAYSCALE);
   image = cv::imread(filename_ima);
  
@@ -101,8 +101,8 @@ void interpolation(unsigned int img_count){
   chrono::duration<double> time_used = chrono::duration_cast < chrono::duration < double >> (t2 - t1);
   cout << "Total time in interpolation: " << time_used.count() << " s." << endl;
 
- char pic1[50];
- sprintf(pic1, "./dataset/result/pcxyz/Frame_%d_channelxyz.png", v);
+ char pic1[70];
+ sprintf(pic1, "./dataset/train/3channel_train_pc_inter/Frame_%d_channelxyz.png", v);
  cv::imshow("interpolation", image_interpolation);
  cv::imwrite(pic1, image_interpolation); //save the image 
   
